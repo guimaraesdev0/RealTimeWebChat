@@ -3,7 +3,25 @@
 @tailwind utilities;
 
 @layer base {
-    body{
+    body {
         background-color: #161617;
+        overflow: hidden;
     }
 }
+
+html {
+    @apply h-full;
+}
+
+body {
+    @apply h-full;
+}
+
+div#__next {
+    @apply h-full;
+}
+
+main {
+    @apply h-full;
+}
+

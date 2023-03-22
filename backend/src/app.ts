@@ -7,24 +7,29 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 interface MessageType {
-    author:string;
-    msg:string;
+  author: string;
+  msg: string;
+  date: string;
+  role: "user" | "system";
 }
+
+const HistoryChat:MessageType[] = []
 
 app.get('/', (_req, res) => {
   res.send("Olá mundo");
 });
 
 io.on('connection', (socket) => {
-  console.log(`Usuário conectado: ${socket.id}`);
 
   socket.on('newMessage', (msgData:MessageType) => {
-    console.log(`Mensagem recebida e enviada`);
     io.emit('Message', msgData);
+    console.log(`Mensagem recebida e enviada`);
+    
   });
 
   socket.on('disconnect', () => {
     console.log(`Usuário desconectado: ${socket.id}`);
+    
   });
 });
 
