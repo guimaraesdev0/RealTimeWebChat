@@ -7,7 +7,8 @@ import { AiOutlineSend } from "react-icons/ai"
 interface MessageType {
   author: string;
   msg: string;
-  date: string;
+  timestamp: string;
+  role: 'user' | 'administrator' | 'bot';
 }
 
 export default function Home() {
@@ -18,13 +19,9 @@ export default function Home() {
   const historyDivRef = useRef<HTMLDivElement | null>(null);
 
 
-
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
-    const storedChatHistory = localStorage.getItem('chatHistory');
-    if (storedChatHistory) {
-      setList(JSON.parse(storedChatHistory));
-    }
+
     if (storedUsername) {
       setUsername(storedUsername);
       setLoggedIn(true);
@@ -60,14 +57,13 @@ export default function Home() {
       let m = addZero(d.getMinutes());
       let s = addZero(d.getSeconds());
       let time = h + ":" + m + ":" + s + " " + day + "/" + month + "/" + year;
-      socket.emit("newMessage", { author: username, msg: message, date: time });
+      socket.emit("newMessage", { author: username, msg: message, timestamp:time, role: 'user'} as MessageType);
       setMessage("")
     }
   };
 
   socket.on("Message", (msgData: MessageType) => {
     setList([...list, msgData]);
-    localStorage.setItem('chatHistory', JSON.stringify([...list, msgData]));
   });
 
   return (
@@ -97,21 +93,25 @@ export default function Home() {
                   <span className="text-white font-medium">Olá bem-vindo {username} 👋, apenas seu nome será salva nos cookies do seu navegador 🍪, além do nome nenhum informação como IP'S histórico ou dados do navegador será salvo 🔒</span>
                 </div>
               </div>
+             
+             
               {/* User Message Item */}
               {list.map((msg: MessageType, i) => (
+              
                 <div key={i} className={msg.author == username ? 'flex flex-col items-end ' : 'flex flex-col items-start'}>
-                  <span className=" text-sm mt-1 text-gray-400">{msg.author} º {i}</span>
-                  <div className={msg.author == username ? ' bg-gray-300 py-2 px-4 rounded-md max-w-5xl max-w-3/6 break-words' : 'bg-gradient-to-r from-indigo-500 to-indigo-700 py-2 px-4 rounded-md max-w-5xl max-w-3/6 break-words'}>
+                   
+                <span className=" text-sm mt-1 text-gray-400">{msg.author} º {i} {msg.role == "bot" ? <span className="">Bot</span>:''}</span>
+                  <div className={msg.author == username ? ' bg-gray-300 py-2 px-4 rounded-md max-w-5xl max-w-3/6 break-words' : msg.role == 'administrator' ? 'bg-amber-500 py-2 px-4 rounded-md max-w-5xl max-w-3/6 break-words': msg.role == 'bot' ? ' bg-teal-500 py-2 px-4 rounded-md max-w-5xl max-w-3/6 break-words':'bg-indigo-600 py-2 px-4 rounded-md max-w-5xl max-w-3/6 break-words'}>
                     <span className={msg.author == username ? 'text-black' : 'text-white'}>{msg.msg} </span>
                   </div>
-                  <span className="text-gray-400 text-sm mt-1">{msg.date}</span>
+                  <span className="text-gray-400 text-sm mt-1">{msg.timestamp}</span>
                 </div>
               ))}
             </div>
             <div className="flex justify-center mt-5">
               <div className=" w-5/12 h-12 bottom-0 rounded-full fixed mb-5">
-                <input type="text" placeholder="Sua mensagem..." className="text-white pl-5 w-full h-full rounded-full bg-slate-700 border-2 border-gray-700 focus:text-white focus:border-teal-500" value={message} onChange={(e) => setMessage(e.target.value)} />
-                <button className="absolute w-16 pt-1 ml-2 rounded-md text-indigo-500 text-4xl text-center" onClick={handlePost}><AiOutlineSend /></button>
+                <input onKeyDown={(e) => {if(e.keyCode == 13) {handlePost()}}} type="text" placeholder="Sua mensagem..." className="text-white pl-5 w-full h-full rounded-full bg-slate-700 border-2 border-gray-700 focus:text-white focus:border-teal-500" value={message} onChange={(e) => setMessage(e.target.value)} />
+                <button className="absolute w-16 pt-1 ml-2 rounded-full text-indigo-500 text-4xl text-center" onClick={handlePost}><AiOutlineSend className="ml-4 text-center"/></button>
               </div>
             </div>
           </div>
