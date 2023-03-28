@@ -20,6 +20,7 @@ app.get('/', (_req, res) => {
 
 /* Socket.io Connection */
 io.on('connection', (socket) => {
+  
   /* New Message */
 
   socket.on('newMessage', (msgData: MessageType) => {

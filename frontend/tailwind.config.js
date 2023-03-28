@@ -5,7 +5,7 @@ module.exports = {
     
     extend: {
       colors: {
-        'custom-nav':'#1f1f1f',
+        'custom-nav':'#121212',
       }
     },
   },
