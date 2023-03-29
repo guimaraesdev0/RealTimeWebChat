@@ -11,7 +11,6 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 
-
 /* Default Route */
 app.get('/', (_req, res) => {
   res.send("Hello World!");
@@ -20,13 +19,13 @@ app.get('/', (_req, res) => {
 
 /* Socket.io Connection */
 io.on('connection', (socket) => {
-  
+
   /* New Message */
 
   socket.on('newMessage', (msgData: MessageType) => {
 
     const { author, msg } = msgData;
-    
+
     for (const botName in bots) {
       const bot = bots[botName];
       const prefixes = bot.prefixes;
@@ -63,4 +62,4 @@ server.listen(3000, () => {
   console.log('Servidor iniciado na porta 3000');
 });
 
-export {io}
+export { io }

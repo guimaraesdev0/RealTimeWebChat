@@ -22,7 +22,7 @@ const bots: Bot = {
           {
             nome: "Antonio",
             level: "15",
-            descricao: "Antonio tem o poder passado de sua antiga tribo, onde ele os traiu entroca de sabedoria e poder do C#",
+            descricao: "Antonio tem o poder passado de sua antiga tribo, onde ele os traiu em troca de sabedoria e poder do C#",
           },
           {
             nome: "Ezekiel",
@@ -32,7 +32,7 @@ const bots: Bot = {
         ];
         const randomIndex = Math.floor(Math.random() * personagens.length);
         const randomPersonagem = personagens[randomIndex];
-        io.emit('Message', { author: '🎲 Tunai', msg: `🎲 Você reletou o: ${randomPersonagem.nome} 🎉, nível ${randomPersonagem.level}. ${randomPersonagem.descricao}`, timestamp: new Date().toISOString(), role: 'bot' } as MessageType);
+        io.emit('Message', { author: '🎲 Tunai', msg: `Você roletou o: ${randomPersonagem.nome} \n nível ${randomPersonagem.level}. \n ${randomPersonagem.descricao} \n *Requisitado por: ${msgData.author}*`, timestamp: new Date().toISOString(), role: 'bot' } as MessageType);
       },
     }
   },

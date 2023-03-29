@@ -2,11 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
     body {
         background-color: #161617;
         overflow: hidden;
     }
+}
+
+.history-div::-webkit-scrollbar {
+    width: 8px;
+    background-color: #1F2937;
+}
+
+.history-div::-webkit-scrollbar-thumb {
+    background-color: #4B5563;
+    border-radius: 4px;
 }
 
 html {
@@ -24,4 +35,3 @@ div#__next {
 main {
     @apply h-full;
 }
-
